@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/task.dart';
+import '../providers/task_provider.dart';
+import '../screens/task_form_screen.dart';
+
+class TaskItem extends StatelessWidget {
+  final Task task;
+
+  const TaskItem({Key? key, required this.task}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<TaskProvider>(context, listen: false);
+
+    return ListTile(
+      title: Text(
+        task.description,
+        style: TextStyle(
+          decoration:
+          task.isCompleted ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      subtitle: Text(
+        '${task.priority} | ${task.dateTime.toLocal().toString().split('.')[0]}',
+      ),
+      leading: Checkbox(
+        value: task.isCompleted,
+        onChanged: (_) => provider.toggleCompletion(task),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => TaskFormScreen(task: task),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () => provider.deleteTask(task.id),
+          ),
+        ],
+      ),
+    );
+  }
+}
