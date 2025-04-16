@@ -25,12 +25,6 @@ class ApiService {
     if (response.statusCode == 201) {
       return Task.fromJson(json.decode(response.body));
     } else {
-      print("resposta " + response.body);
-      print("Tarefa: " + task.description);
-      print("prioridade: " + task.priority);
-      print("id: " + task.id.toString());
-      print("data: " + task.dateTime.toString());
-      print("completa: " + task.isCompleted.toString());
       throw Exception('Erro ao criar tarefa');
     }
   }
